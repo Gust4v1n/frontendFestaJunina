@@ -58,6 +58,39 @@ tailwind.config = {
 </head>
 <body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col">
 
+<!-- ===== LGPD CAIPIRA: Modal de Consentimento (MUST HAVE) ===== -->
+<div id="lgpd-overlay" class="fixed inset-0 z-[9999] flex items-end md:items-center justify-center bg-on-tertiary-fixed bg-opacity-80 backdrop-blur-sm" style="display:flex!important;">
+  <div class="w-full max-w-lg mx-4 mb-0 md:mb-0 bg-surface border-4 border-outline shadow-[8px_8px_0px_0px_#251912] rounded-t-xl md:rounded-xl overflow-hidden">
+    <div class="chita-strip h-3 w-full"></div>
+    <div class="p-lg flex flex-col gap-md">
+      <div class="flex items-start gap-sm">
+        <span class="material-symbols-outlined text-primary text-headline-lg mt-xs shrink-0" style="font-variation-settings:'FILL' 1;">gavel</span>
+        <div>
+          <h2 class="font-headline-lg text-headline-lg text-on-surface">Ei, chegante! Antes de entrar…</h2>
+          <p class="font-label-md text-label-md text-tertiary uppercase tracking-widest mt-xs">Lei Geral de Proteção de Dados (LGPD)</p>
+        </div>
+      </div>
+      <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+        Para participar do Arraiá Digital precisamos guardar um <strong class="text-on-surface">identificador anônimo</strong> no seu dispositivo (localStorage) para salvar suas fichas e pontos durante a festa. Nenhum dado pessoal como nome real, e-mail ou CPF é coletado sem que você informe.
+      </p>
+      <div class="bg-surface-container border-2 border-outline rounded p-sm flex gap-sm items-start">
+        <span class="material-symbols-outlined text-secondary text-[20px] mt-xs shrink-0">info</span>
+        <p class="font-body-md text-[14px] text-on-surface-variant">Seus dados são usados <strong class="text-on-surface">exclusivamente</strong> para o funcionamento da plataforma e não são compartilhados com terceiros. Você pode solicitar a exclusão a qualquer momento pelo rodapé.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-sm mt-sm">
+        <button onclick="aceitarLGPD()" class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-sm px-md rounded border-b-4 border-outline hard-shadow hover:-translate-y-1 hover:border-b-[6px] active:translate-y-1 active:border-b-2 transition-all flex items-center justify-center gap-xs">
+          <span class="material-symbols-outlined text-[18px]">check_circle</span> Aceitar e Entrar na Festa!
+        </button>
+        <button onclick="recusarLGPD()" class="flex-1 bg-surface border-2 border-outline text-on-surface-variant font-label-md text-label-md py-sm px-md rounded hover:bg-surface-container transition-colors flex items-center justify-center gap-xs">
+          <span class="material-symbols-outlined text-[18px]">close</span> Recusar (modo leitura)
+        </button>
+      </div>
+      <p class="text-center font-body-md text-[12px] text-on-surface-variant">Ao continuar você concorda com nossa <a href="#" class="text-primary underline hover:no-underline">Política de Privacidade</a>.</p>
+    </div>
+  </div>
+</div>
+<!-- ===== /LGPD ===== -->
+
 <!-- TopAppBar -->
 <header class="w-full top-0 sticky bg-surface border-b-2 border-outline shadow-[4px_4px_0px_0px_rgba(58,46,38,1)] z-40">
   <div class="flex items-center justify-between px-margin py-md max-w-7xl mx-auto">
@@ -69,6 +102,7 @@ tailwind.config = {
       <a class="nav-link font-label-md text-label-md cursor-pointer hover:rotate-1 hover:scale-105 transition-transform" data-page="home" onclick="navigate('home')">Início</a>
       <a class="nav-link font-label-md text-label-md cursor-pointer hover:rotate-1 hover:scale-105 transition-transform" data-page="pesca" onclick="navigate('pesca')">Pesca</a>
       <a class="nav-link font-label-md text-label-md cursor-pointer hover:rotate-1 hover:scale-105 transition-transform" data-page="comidas" onclick="navigate('comidas')">Comidas</a>
+      <a class="nav-link font-label-md text-label-md cursor-pointer hover:rotate-1 hover:scale-105 transition-transform" data-page="correio" onclick="navigate('correio')">Correio Elegante</a>
       <a class="nav-link font-label-md text-label-md cursor-pointer hover:rotate-1 hover:scale-105 transition-transform" data-page="agenda" onclick="navigate('agenda')">Agenda</a>
     </nav>
     <span class="material-symbols-outlined text-primary text-headline-lg cursor-pointer active:scale-95 md:hidden">menu</span>
@@ -136,7 +170,7 @@ tailwind.config = {
           </div>
           <p class="font-body-md text-body-md text-on-surface-variant">Envie mensagens anônimas para os outros convidados da festa.</p>
         </div>
-        <button class="mt-lg w-full bg-surface-variant text-on-surface font-label-md text-label-md py-sm border-2 border-outline rounded hard-shadow hover:-translate-y-1 hover:bg-surface-dim transition-transform">Escrever Cartão</button>
+        <button onclick="navigate('correio')" class="mt-lg w-full bg-surface-variant text-on-surface font-label-md text-label-md py-sm border-2 border-outline rounded hard-shadow hover:-translate-y-1 hover:bg-surface-dim transition-transform flex items-center justify-center gap-xs"><span class="material-symbols-outlined text-[16px]">auto_awesome</span> Escrever Cartão com IA</button>
       </div>
     </div>
 
@@ -246,6 +280,81 @@ tailwind.config = {
   </div>
 </main>
 
+<!-- ===== PAGE: CORREIO ELEGANTE COM IA (MUST HAVE) ===== -->
+<main id="page-correio" class="page page-content flex-grow w-full max-w-4xl mx-auto px-margin py-xl flex flex-col gap-lg">
+  <div class="flex flex-col items-center text-center mb-md">
+    <span class="material-symbols-outlined text-tertiary text-[48px] mb-sm -rotate-6" style="font-variation-settings:'FILL' 1;">favorite</span>
+    <h2 class="font-display text-display text-on-background mb-base">Correio Elegante</h2>
+    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">Mande um recadinho anônimo e deixe a IA dar aquele toque poético de arraial!</p>
+  </div>
+
+  <div class="bg-surface border-4 border-outline rounded-lg shadow-[8px_8px_0px_0px_#251912] overflow-hidden rotate-[0.3deg]">
+    <div class="chita-strip h-3 w-full"></div>
+    <div class="p-lg flex flex-col gap-md">
+
+      <!-- Tom do cartão -->
+      <div>
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-sm block">Tom do Cartão</label>
+        <div class="flex flex-wrap gap-sm">
+          <button onclick="selecionarTom(this, 'romantico')" class="tom-btn bg-tertiary-container text-on-tertiary-container font-label-md text-label-md px-md py-xs border-2 border-outline rounded-full hard-shadow hover:-translate-y-1 transition-all data-selected:bg-tertiary data-selected:text-on-tertiary" data-tom="romantico">💕 Romântico</button>
+          <button onclick="selecionarTom(this, 'engraçado')" class="tom-btn bg-secondary-container text-on-secondary-container font-label-md text-label-md px-md py-xs border-2 border-outline rounded-full hard-shadow hover:-translate-y-1 transition-all" data-tom="engraçado">😄 Engraçado</button>
+          <button onclick="selecionarTom(this, 'misterioso')" class="tom-btn bg-surface-container text-on-surface font-label-md text-label-md px-md py-xs border-2 border-outline rounded-full hard-shadow hover:-translate-y-1 transition-all" data-tom="misterioso">🕵️ Misterioso</button>
+          <button onclick="selecionarTom(this, 'poético')" class="tom-btn bg-primary-fixed text-on-primary-fixed font-label-md text-label-md px-md py-xs border-2 border-outline rounded-full hard-shadow hover:-translate-y-1 transition-all" data-tom="poético">🌻 Poético</button>
+        </div>
+      </div>
+
+      <!-- Para quem -->
+      <div>
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-xs block" for="correio-para">Para quem? <span class="normal-case text-[12px] text-on-surface-variant">(pode ser apelido, não precisa de nome real)</span></label>
+        <input id="correio-para" type="text" placeholder="Ex: a pessoa de chapéu amarelo na pista…" maxlength="60"
+          class="w-full border-2 border-outline bg-surface-container rounded px-md py-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary transition-colors" />
+      </div>
+
+      <!-- Contexto -->
+      <div>
+        <label class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest mb-xs block" for="correio-contexto">O que você quer dizer? <span class="normal-case text-[12px] text-on-surface-variant">(a IA vai deixar mais bonito!)</span></label>
+        <textarea id="correio-contexto" rows="3" placeholder="Ex: achei ela muito bonita dançando forró, queria ter coragem de chamar pra dançar…" maxlength="300"
+          class="w-full border-2 border-outline bg-surface-container rounded px-md py-sm font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary transition-colors resize-none"></textarea>
+        <p class="text-[12px] text-on-surface-variant mt-xs text-right"><span id="contexto-count">0</span>/300</p>
+      </div>
+
+      <button onclick="gerarCorreio()" id="btn-gerar"
+        class="bg-tertiary text-on-tertiary font-label-md text-label-md py-sm px-lg rounded border-b-4 border-outline hard-shadow hover:-translate-y-1 hover:border-b-[6px] active:translate-y-1 active:border-b-2 transition-all flex items-center justify-center gap-sm w-full md:w-max mx-auto">
+        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">auto_awesome</span>
+        <span id="btn-gerar-label">Gerar Cartão com IA</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  <div id="correio-resultado" class="hidden bg-surface border-4 border-primary rounded-lg shadow-[8px_8px_0px_0px_#994700] overflow-hidden -rotate-[0.5deg]">
+    <div class="bg-primary px-lg py-sm flex items-center justify-between">
+      <div class="flex items-center gap-sm">
+        <span class="material-symbols-outlined text-on-primary text-[20px]" style="font-variation-settings:'FILL' 1;">mail</span>
+        <span class="font-label-md text-label-md text-on-primary uppercase tracking-widest">Seu Cartão Ficou Assim ✨</span>
+      </div>
+      <button onclick="copiarCartao()" class="bg-on-primary text-primary font-label-md text-label-md px-sm py-xs border border-primary rounded hover:opacity-80 transition-opacity text-[12px] flex items-center gap-xs">
+        <span class="material-symbols-outlined text-[14px]">content_copy</span> Copiar
+      </button>
+    </div>
+    <div class="p-lg">
+      <p id="correio-texto" class="font-body-lg text-body-lg text-on-surface whitespace-pre-line leading-relaxed"></p>
+    </div>
+    <div class="px-lg pb-md flex justify-end">
+      <button onclick="gerarCorreio()" class="font-label-md text-label-md text-on-surface-variant underline hover:text-primary transition-colors flex items-center gap-xs">
+        <span class="material-symbols-outlined text-[16px]">refresh</span> Gerar outro
+      </button>
+    </div>
+  </div>
+
+  <!-- Info LGPD inline -->
+  <div class="bg-surface-container border-2 border-outline rounded p-sm flex gap-sm items-start rotate-[-0.3deg]">
+    <span class="material-symbols-outlined text-outline text-[18px] mt-xs shrink-0">shield</span>
+    <p class="font-body-md text-[13px] text-on-surface-variant">Seus recados são anônimos e processados pela IA sem armazenar dados pessoais. O conteúdo do cartão não é guardado em nossos servidores.</p>
+  </div>
+</main>
+<!-- ===== /CORREIO ELEGANTE ===== -->
+
 <!-- ===== PAGE: AGENDA ===== -->
 <main id="page-agenda" class="page page-content flex-grow w-full max-w-7xl mx-auto px-margin py-xl flex flex-col gap-xl">
   <section class="relative w-full rounded-xl border-4 border-outline bg-surface-container overflow-hidden shadow-[8px_8px_0px_0px_#251912]">
@@ -316,7 +425,7 @@ tailwind.config = {
         <h3 class="font-headline-md text-headline-md text-on-surface">Correio Elegante</h3>
       </div>
       <p class="font-body-md text-body-md text-on-surface-variant flex-grow">Mande aquele recadinho especial (e anônimo!) para quem mexeu com seu coração durante o arraiá.</p>
-      <button class="bg-surface-container border-2 border-outline text-tertiary font-label-md text-label-md px-md py-sm w-full shadow-[0px_2px_0px_0px_#8b7264] active:shadow-none active:translate-y-[2px] transition-all hover:bg-surface-container-high rounded">Enviar Recado Online</button>
+      <button onclick="navigate('correio')" class="bg-surface-container border-2 border-outline text-tertiary font-label-md text-label-md px-md py-sm w-full shadow-[0px_2px_0px_0px_#8b7264] active:shadow-none active:translate-y-[2px] transition-all hover:bg-surface-container-high rounded flex items-center justify-center gap-xs"><span class="material-symbols-outlined text-[16px]">auto_awesome</span> Enviar Recado com IA</button>
     </article>
   </section>
 </main>
@@ -348,6 +457,10 @@ tailwind.config = {
     <span class="material-symbols-outlined">restaurant_menu</span>
     <span class="font-label-md text-label-md mt-1 text-[11px]">Comidas</span>
   </a>
+  <a id="nav-correio" onclick="navigate('correio')" class="bottom-nav-item flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 rounded-full scale-110 transition-all duration-200 cursor-pointer">
+    <span class="material-symbols-outlined">favorite</span>
+    <span class="font-label-md text-label-md mt-1 text-[11px]">Correio</span>
+  </a>
   <a id="nav-agenda" onclick="navigate('agenda')" class="bottom-nav-item flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 rounded-full scale-110 transition-all duration-200 cursor-pointer">
     <span class="material-symbols-outlined">event</span>
     <span class="font-label-md text-label-md mt-1 text-[11px]">Agenda</span>
@@ -355,14 +468,12 @@ tailwind.config = {
 </nav>
 
 <script>
-  // ====== CONFIGURAÇÃO ======
   const API = 'https://backend-festa-junina.vercel.app/api';
   let user = null;
   let fishPrizes = [];
   let gameActive = false;
   let spawnedFish = [];
 
-  // ====== NAVEGAÇÃO SPA ======
   function navigate(pageId) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
     const target = document.getElementById(`page-${pageId}`);
@@ -381,7 +492,6 @@ tailwind.config = {
     if (pageId === 'comidas') loadProducts();
     if (pageId === 'pesca') { loadFishPrizes(); updateStatsUI(); }
   }
-  // ====== USUÁRIO ======
   async function initUser() {
     let userId = localStorage.getItem('arraia_user_id');
     try {
@@ -426,7 +536,6 @@ tailwind.config = {
     }
   }
 
-  // ====== PRODUTOS (COM FALLBACK) ======
   async function loadProducts() {
     const container = document.getElementById('food-list');
     if (!container) return;
@@ -708,14 +817,148 @@ tailwind.config = {
     }
   }
 
-  // ====== INICIALIZAÇÃO ======
+  // ====== LGPD CAIPIRA (MUST HAVE) ======
+  function verificarLGPD() {
+    const consentimento = localStorage.getItem('arraia_lgpd_consent');
+    if (consentimento === 'aceito' || consentimento === 'recusado') {
+      document.getElementById('lgpd-overlay').style.display = 'none';
+    }
+  }
+
+  function aceitarLGPD() {
+    localStorage.setItem('arraia_lgpd_consent', 'aceito');
+    document.getElementById('lgpd-overlay').style.display = 'none';
+  }
+
+  function recusarLGPD() {
+    localStorage.setItem('arraia_lgpd_consent', 'recusado');
+    document.getElementById('lgpd-overlay').style.display = 'none';
+    // modo leitura: não inicializa usuário, não salva dados
+    user = { id: 'leitura', nome: 'Visitante', fichas: 0, pontos: 0, nivel: 0 };
+  }
+
+  let tomSelecionado = 'romantico';
+
+  function selecionarTom(btn, tom) {
+    tomSelecionado = tom;
+    document.querySelectorAll('.tom-btn').forEach(b => {
+      b.classList.remove('bg-tertiary', 'text-on-tertiary', 'scale-105', '-rotate-1');
+    });
+    btn.classList.add('bg-tertiary', 'text-on-tertiary', 'scale-105', '-rotate-1');
+  }
+
+  async function gerarCorreio() {
+    const para = document.getElementById('correio-para')?.value?.trim();
+    const contexto = document.getElementById('correio-contexto')?.value?.trim();
+
+    if (!contexto) {
+      showResultPopup('✍️ Conta um pouco o que você quer dizer primeiro!', 'info');
+      return;
+    }
+
+    const btn = document.getElementById('btn-gerar');
+    const label = document.getElementById('btn-gerar-label');
+    btn.disabled = true;
+    label.textContent = 'Gerando...';
+
+    const prompt = `Você é um animador de festa junina, especialista em correio elegante caipira.
+Escreva um cartão de correio elegante com tom ${tomSelecionado}, no estilo de festa junina brasileira.
+${para ? `O cartão é para: "${para}".` : 'O destinatário é alguém especial na festa.'}
+O remetente quer dizer: "${contexto}"
+O cartão deve ter entre 4 e 8 linhas, ser charmoso, usar expressões juninas quando couber, e terminar de forma anônima (ex: "De: Um(a) Admirador(a) Secreto(a)").
+Escreva APENAS o texto do cartão, sem explicações extras.`;
+
+    try {
+      const response = await fetch(`${API}/correio`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await response.json();
+      if (!data?.success) throw new Error(data?.message || 'Erro desconhecido');
+      const texto = data.texto || 'Não foi possível gerar o cartão. Tente novamente!';
+      document.getElementById('correio-texto').textContent = texto;
+      document.getElementById('correio-resultado').classList.remove('hidden');
+      document.getElementById('correio-resultado').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (err) {
+      console.error('Erro ao gerar correio:', err);
+      showResultPopup('⚠️ Erro ao chamar a IA. Verifique sua conexão.', 'info');
+    } finally {
+      btn.disabled = false;
+      label.textContent = 'Gerar Cartão com IA';
+    }
+  }
+
+  function copiarCartao() {
+    const texto = document.getElementById('correio-texto')?.textContent;
+    if (texto) {
+      navigator.clipboard.writeText(texto).then(() => {
+        showResultPopup('📋 Cartão copiado!', 'success');
+      }).catch(() => showResultPopup('⚠️ Não foi possível copiar.', 'info'));
+    }
+  }
+
+  // ====== COULD HAVE: FUNDO DINÂMICO POR TEMPERATURA ======
+  // Desativado por padrão. Descomentar quando as entregas Must estiverem homologadas.
+  /*
+  async function aplicarFundoTemperatura() {
+    try {
+      // API pública sem chave para demonstração (Open-Meteo)
+      const geo = await fetch('https://ipapi.co/json/').then(r => r.json());
+      const clima = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${geo.latitude}&longitude=${geo.longitude}&current_weather=true`
+      ).then(r => r.json());
+      const temp = clima?.current_weather?.temperature;
+
+      // < 15°C → azul frio; 15-25°C → laranja quente; > 25°C → vermelho festa
+      const fundo = temp < 15
+        ? 'linear-gradient(135deg, #b8d4f0 0%, #7aa8d4 100%)'
+        : temp < 25
+          ? 'linear-gradient(135deg, #fff8f5 0%, #ffeadf 100%)'
+          : 'linear-gradient(135deg, #ffdbc8 0%, #ff6748 100%)';
+
+      document.body.style.background = fundo;
+      console.log(`🌡️ Temperatura local: ${temp}°C — fundo ajustado.`);
+    } catch (e) {
+      console.warn('⚠️ Fundo dinâmico indisponível, usando cor fixa.', e);
+    }
+  }
+  // Chamada: aplicarFundoTemperatura();
+  */
+
+  // ====== WON'T HAVE: SISTEMA DE MILHAS (GRÃOS DE MILHO) ======
+  // Removido desta Sprint. Retorna ao Product Backlog para Sprint futura.
+  // Requer: lógica de banco de dados, segurança anti-manipulação de saldo,
+  //         autenticação robusta. Complexidade incompatível com equipe reduzida.
+
+  // ====== WON'T HAVE: FILTRO DE REALIDADE AUMENTADA (BIGODE) ======
+  // Cortado sumariamente. Processamento 3D, manipulação de câmera e testes
+  // em dezenas de modelos de celular inviabilizam com a equipe atual.
+
   document.addEventListener('DOMContentLoaded', async () => {
     navigate('home');
+    verificarLGPD();
+
+    // Selecionar tom padrão visualmente
+    const defaultTom = document.querySelector('.tom-btn[data-tom="romantico"]');
+    if (defaultTom) defaultTom.classList.add('bg-tertiary', 'text-on-tertiary', 'scale-105');
+
+    const contextoEl = document.getElementById('correio-contexto');
+    if (contextoEl) {
+      contextoEl.addEventListener('input', () => {
+        document.getElementById('contexto-count').textContent = contextoEl.value.length;
+      });
+    }
+
+    const consent = localStorage.getItem('arraia_lgpd_consent');
+    if (consent === 'recusado') {
+      user = { id: 'leitura', nome: 'Visitante', fichas: 0, pontos: 0, nivel: 0 };
+      return;
+    }
     try {
       await initUser();
       await Promise.all([loadProducts(), loadFishPrizes()]);
       setupGameButton();
-      
       console.log('✅ Arraiá Digital carregado!');
     } catch (err) {
       console.error('⚠️ Erro na inicialização:', err);
